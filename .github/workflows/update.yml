@@ -20,7 +20,7 @@ jobs:
       MAX_CANDIDATES: "500"
       PROXY_TIMEOUT: "5"
       TEST_URLS: "https://www.gstatic.com/generate_204,https://cp.cloudflare.com/generate_204"
-      RECHECK_LIMIT: "30"
+      RECHECK_LIMIT: "500"
       FINAL_LIMIT: "0"
     steps:
       - name: Checkout
