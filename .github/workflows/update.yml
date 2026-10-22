@@ -17,11 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      MAX_CANDIDATES: "100"
+      MAX_CANDIDATES: "500"
       PROXY_TIMEOUT: "5"
       TEST_URLS: "https://www.gstatic.com/generate_204,https://cp.cloudflare.com/generate_204"
       RECHECK_LIMIT: "30"
-      FINAL_LIMIT: "20"
+      FINAL_LIMIT: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
