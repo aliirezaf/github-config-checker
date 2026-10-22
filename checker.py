@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Test proxy share links using Sing-box and a local SOCKS listener."""
 import base64
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 import os
 import random
@@ -19,10 +20,13 @@ INPUT = os.environ.get("COLLECTED_FILE", "output/collected.txt")
 GROUPED_INPUT = os.environ.get("GROUPED_FILE", "output/collected_by_source.json")
 OUT_DIR = os.environ.get("OUTPUT_DIR", "output")
 TEST_URLS = [u.strip() for u in os.environ.get("TEST_URLS", "https://www.gstatic.com/generate_204,https://cp.cloudflare.com/generate_204").split(",") if u.strip()]
-TIMEOUT = int(os.environ.get("PROXY_TIMEOUT", "5"))
+TIMEOUT = int(os.environ.get("PROXY_TIMEOUT", "6"))
 MAX_CANDIDATES = int(os.environ.get("MAX_CANDIDATES", "500"))
 FINAL_LIMIT = int(os.environ.get("FINAL_LIMIT", "0"))
-RECHECK_LIMIT = int(os.environ.get("RECHECK_LIMIT", "30"))
+RECHECK_LIMIT = int(os.environ.get("RECHECK_LIMIT", "500"))
+TEST_WORKERS = max(1, int(os.environ.get("TEST_WORKERS", "20")))
+STABILITY_ROUNDS = max(1, int(os.environ.get("STABILITY_ROUNDS", "3")))
+STABILITY_INTERVAL = max(0, int(os.environ.get("STABILITY_INTERVAL", "10"))
 SUPPORTED = {"vless", "vmess", "trojan", "ss", "socks", "socks5", "http", "https"}
 
 def free_port():
@@ -260,50 +264,90 @@ def main():
     protocol_files = {"vless": [], "vmess": [], "trojan": [], "ss": [], "socks": [], "http": []}
     results_by_link = {}
     passed = []
-    for i, link in enumerate(candidates, 1):
+
+    def test_with_retry(link, label):
+        try:
+            return run_one(link)
+        except (ValueError, TypeError, KeyError, json.JSONDecodeError):
+            raise
+        except Exception as first_exc:
+            print(f"[{label}] RETRY: {type(first_exc).__name__}: {str(first_exc)[:120]}")
+            time.sleep(0.6)
+            return run_one(link)
+
+    supported_candidates = []
+    for link in candidates:
         proto = link.split(":", 1)[0].lower()
         if proto not in SUPPORTED:
             results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(dedupe_key(link), []),
                 "result": "failed", "reason": "unsupported scheme"}
-            continue
-        try:
+        else:
+            supported_candidates.append(link)
+
+    print(f"Initial test: {len(supported_candidates)} supported candidates, {TEST_WORKERS} workers, timeout={TIMEOUT}s")
+    with ThreadPoolExecutor(max_workers=TEST_WORKERS) as pool:
+        futures = {pool.submit(test_with_retry, link, f"INITIAL {i}/{len(supported_candidates)}"): (i, link)
+                   for i, link in enumerate(supported_candidates, 1)}
+        for future in as_completed(futures):
+            i, link = futures[future]
+            proto = link.split(":", 1)[0].lower()
             try:
-                latency, status, probes = run_one(link)
-            except (ValueError, TypeError, KeyError, json.JSONDecodeError):
-                raise
-            except Exception as first_exc:
-                print(f"[{i}/{len(candidates)}] RETRY {proto}: {type(first_exc).__name__}: {str(first_exc)[:120]}")
-                time.sleep(0.6)
-                latency, status, probes = run_one(link)
-            passed.append((latency, link, proto, probes))
-            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(dedupe_key(link), []),
-                "latency_ms": latency, "probe_latencies_ms": probes, "http_status": status,
-                "result": "passed_initial"}
-            print(f"[{i}/{len(candidates)}] PASS {proto} avg={latency}ms probes={probes}")
-        except Exception as exc:
-            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(dedupe_key(link), []),
-                "result": "failed", "reason": str(exc)[:180]}
-            print(f"[{i}/{len(candidates)}] FAIL {proto}: {type(exc).__name__}: {exc}")
+                latency, status, probes = future.result()
+                passed.append((latency, link, proto, probes))
+                results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(dedupe_key(link), []),
+                    "latency_ms": latency, "probe_latencies_ms": probes, "http_status": status,
+                    "result": "passed_initial"}
+                print(f"[{i}/{len(supported_candidates)}] PASS {proto} avg={latency}ms probes={probes}")
+            except Exception as exc:
+                results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(dedupe_key(link), []),
+                    "result": "failed", "reason": str(exc)[:180]}
+                print(f"[{i}/{len(supported_candidates)}] FAIL {proto}: {type(exc).__name__}: {exc}")
 
     passed.sort(key=lambda item: item[0])
     finalists = passed[:max(0, RECHECK_LIMIT)]
     verified = []
-    for j, (first_latency, link, proto, first_probes) in enumerate(finalists, 1):
-        try:
-            try:
-                latency, status, probes = run_one(link)
-            except Exception as first_exc:
-                print(f"[RECHECK {j}/{len(finalists)}] RETRY {proto}: {type(first_exc).__name__}: {str(first_exc)[:100]}")
-                time.sleep(0.6)
-                latency, status, probes = run_one(link)
-            score = round((first_latency + latency) / 2)
-            verified.append((score, link, proto))
-            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(dedupe_key(link), []),
-                "latency_ms": score, "probe_latencies_ms": first_probes + probes,
-                "http_status": status, "result": "working", "rechecked": True}
-        except Exception as exc:
-            results_by_link[link]["result"] = "failed_recheck"
-            results_by_link[link]["reason"] = str(exc)[:180]
+    # Stability is checked in separate rounds. A candidate is published only
+    # if every round succeeds; a transient success is not enough.
+    active = {link: {"proto": proto, "latencies": [first_latency], "probes": list(first_probes)}
+              for first_latency, link, proto, first_probes in finalists}
+    for round_no in range(1, STABILITY_ROUNDS + 1):
+        if round_no > 1 and STABILITY_INTERVAL:
+            print(f"Waiting {STABILITY_INTERVAL}s before stability round {round_no}/{STABILITY_ROUNDS}")
+            time.sleep(STABILITY_INTERVAL)
+        print(f"Stability round {round_no}/{STABILITY_ROUNDS}: testing {len(active)} candidates")
+        round_ok = {}
+        with ThreadPoolExecutor(max_workers=TEST_WORKERS) as pool:
+            futures = {pool.submit(test_with_retry, link, f"ROUND {round_no}"): link for link in list(active)}
+            for future in as_completed(futures):
+                link = futures[future]
+                try:
+                    latency, status, probes = future.result()
+                    round_ok[link] = (latency, status, probes)
+                except Exception as exc:
+                    results_by_link[link]["result"] = "failed_stability"
+                    results_by_link[link]["failed_round"] = round_no
+                    results_by_link[link]["reason"] = str(exc)[:180]
+                    print(f"[ROUND {round_no}] DROP {active[link]['proto']}: {type(exc).__name__}: {exc}")
+        for link in list(active):
+            if link not in round_ok:
+                del active[link]
+                continue
+            latency, status, probes = round_ok[link]
+            active[link]["latencies"].append(latency)
+            active[link]["probes"].extend(probes)
+            results_by_link[link]["latency_ms"] = round(active[link]["latencies"] and
+                sum(active[link]["latencies"]) / len(active[link]["latencies"]))
+            results_by_link[link]["probe_latencies_ms"] = active[link]["probes"]
+            results_by_link[link]["http_status"] = status
+            results_by_link[link]["stability_rounds_passed"] = round_no
+            results_by_link[link]["result"] = "working" if round_no == STABILITY_ROUNDS else "checking_stability"
+
+    for link, data in active.items():
+        score = round(sum(data["latencies"]) / len(data["latencies"]))
+        verified.append((score, link, data["proto"]))
+        results_by_link[link]["result"] = "working"
+        results_by_link[link]["rechecked"] = True
+        results_by_link[link]["stability_rounds_required"] = STABILITY_ROUNDS
     verified.sort(key=lambda item: item[0])
     selected = verified if FINAL_LIMIT <= 0 else verified[:FINAL_LIMIT]
     working = [item[1] for item in selected]
@@ -326,7 +370,8 @@ def main():
     for source, items in source_groups.items() if "source_groups" in locals() else []:
         source_stats[source] = {"candidates": len(set(items)) if isinstance(items, list) else 0,
                                 "tested": 0, "working": 0}
-    for item, result in zip(candidates, results):
+    for item in candidates:
+        result = results_by_link.get(item, {})
         for source in result.get("sources", []):
             stats = source_stats.setdefault(source, {"candidates": 0, "tested": 0, "working": 0})
             stats["tested"] += 1
@@ -337,11 +382,11 @@ def main():
 
     with open(os.path.join(OUT_DIR, "status.json"), "w", encoding="utf-8") as f:
         json.dump({"checked_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                   "tested": len(results), "passed_initial": len(passed), "rechecked": len(finalists), "working": len(working),
-                   "test_urls": TEST_URLS, "final_limit": (None if FINAL_LIMIT <= 0 else FINAL_LIMIT),
+                   "tested": len(results), "passed_initial": len(passed), "stability_candidates": len(finalists), "stability_rounds_required": STABILITY_ROUNDS, "stability_interval_seconds": STABILITY_INTERVAL, "test_workers": TEST_WORKERS, "rechecked": sum(1 for x in results if x.get("stability_rounds_passed")), "working": len(working),
+                   "test_urls": TEST_URLS, "timeout_seconds": TIMEOUT, "final_limit": (None if FINAL_LIMIT <= 0 else FINAL_LIMIT),
                    "source_stats": source_stats, "results": results},
                   f, ensure_ascii=False, indent=2)
-    print(f"Finished: {len(working)} high-quality configs published (no output cap); {len(passed)} passed initial tests; {len(finalists)} rechecked")
+    print(f"Finished: {len(working)} configs passed all {STABILITY_ROUNDS} stability rounds; {len(passed)} passed initial tests; {len(finalists)} entered stability testing")
 
 if __name__ == "__main__":
     main()
