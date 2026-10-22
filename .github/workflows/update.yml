@@ -15,12 +15,15 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90
     env:
       MAX_CANDIDATES: "500"
-      PROXY_TIMEOUT: "5"
+      PROXY_TIMEOUT: "6"
       TEST_URLS: "https://www.gstatic.com/generate_204,https://cp.cloudflare.com/generate_204"
       RECHECK_LIMIT: "500"
+      TEST_WORKERS: "20"
+      STABILITY_ROUNDS: "3"
+      STABILITY_INTERVAL: "10"
       FINAL_LIMIT: "0"
     steps:
       - name: Checkout
