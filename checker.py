@@ -235,6 +235,19 @@ def main():
                 candidates = [x.strip() for x in f if x.strip()][:MAX_CANDIDATES]
     except (OSError, ValueError, TypeError):
         candidates = candidates[:MAX_CANDIDATES]
+    # Preserve source provenance so future runs can compare which feeds yield
+    # genuinely working configs, not just the largest number of candidates.
+    source_by_link = {}
+    try:
+        with open(GROUPED_INPUT, encoding="utf-8") as f:
+            source_groups = json.load(f)
+        for source, items in source_groups.items():
+            if isinstance(items, list):
+                for item in items:
+                    source_by_link.setdefault(item, []).append(source)
+    except (OSError, ValueError, TypeError):
+        source_by_link = {}
+
     working, results = [], []
     protocol_files = {"vless": [], "vmess": [], "trojan": [], "ss": [], "socks": [], "http": []}
     for i, link in enumerate(candidates, 1):
@@ -246,10 +259,12 @@ def main():
             working.append(link)
             key = "ss" if proto == "ss" else ("socks" if proto in ("socks", "socks5") else ("http" if proto in ("http", "https") else proto))
             protocol_files[key].append(link)
-            results.append({"protocol": proto, "latency_ms": latency, "http_status": status, "result": "working"})
+            results.append({"protocol": proto, "sources": source_by_link.get(link, []),
+                            "latency_ms": latency, "http_status": status, "result": "working"})
             print(f"[{i}/{len(candidates)}] OK {proto} {latency}ms HTTP {status}")
         except Exception as exc:
-            results.append({"protocol": proto, "result": "failed", "reason": str(exc)[:180]})
+            results.append({"protocol": proto, "sources": source_by_link.get(link, []),
+                            "result": "failed", "reason": str(exc)[:180]})
             print(f"[{i}/{len(candidates)}] FAIL {proto}: {type(exc).__name__}: {exc}")
 
     def write_lines(path, lines):
@@ -260,9 +275,25 @@ def main():
     write_lines(os.path.join(OUT_DIR, "all.txt"), working)
     for proto, lines in protocol_files.items():
         write_lines(os.path.join(OUT_DIR, f"{proto}.txt"), lines)
+    # Aggregate source quality from this run. These metrics are descriptive:
+    # feeds overlap, so a link appearing in multiple feeds is credited to each.
+    source_stats = {}
+    for source, items in source_groups.items() if "source_groups" in locals() else []:
+        source_stats[source] = {"candidates": len(set(items)) if isinstance(items, list) else 0,
+                                "tested": 0, "working": 0}
+    for item, result in zip(candidates, results):
+        for source in result.get("sources", []):
+            stats = source_stats.setdefault(source, {"candidates": 0, "tested": 0, "working": 0})
+            stats["tested"] += 1
+            if result.get("result") == "working":
+                stats["working"] += 1
+    for stats in source_stats.values():
+        stats["success_rate_pct"] = round(100 * stats["working"] / stats["tested"], 1) if stats["tested"] else None
+
     with open(os.path.join(OUT_DIR, "status.json"), "w", encoding="utf-8") as f:
         json.dump({"checked_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                   "tested": len(results), "working": len(working), "results": results},
+                   "tested": len(results), "working": len(working),
+                   "source_stats": source_stats, "results": results},
                   f, ensure_ascii=False, indent=2)
     print(f"Finished: {len(working)}/{len(results)} passed")
 
