@@ -10,6 +10,8 @@ import tempfile
 import time
 from urllib.parse import urlsplit, parse_qs, unquote
 
+from collector import dedupe_key
+
 import requests
 
 SING_BOX = os.environ.get("SING_BOX", "./sing-box")
@@ -230,11 +232,11 @@ def main():
         seen = set()
         while len(candidates) < MAX_CANDIDATES and any(buckets):
             for bucket in buckets:
-                while bucket and bucket[0] in seen:
+                while bucket and dedupe_key(bucket[0]) in seen:
                     bucket.pop(0)
                 if bucket and len(candidates) < MAX_CANDIDATES:
                     item = bucket.pop(0)
-                    seen.add(item)
+                    seen.add(dedupe_key(item))
                     candidates.append(item)
         if not candidates:
             with open(INPUT, encoding="utf-8") as f:
@@ -250,7 +252,7 @@ def main():
         for source, items in source_groups.items():
             if isinstance(items, list):
                 for item in items:
-                    source_by_link.setdefault(item, []).append(source)
+                    source_by_link.setdefault(dedupe_key(item), []).append(source)
     except (OSError, ValueError, TypeError):
         source_by_link = {}
 
@@ -261,7 +263,7 @@ def main():
     for i, link in enumerate(candidates, 1):
         proto = link.split(":", 1)[0].lower()
         if proto not in SUPPORTED:
-            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(link, []),
+            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(dedupe_key(link), []),
                 "result": "failed", "reason": "unsupported scheme"}
             continue
         try:
@@ -274,12 +276,12 @@ def main():
                 time.sleep(0.6)
                 latency, status, probes = run_one(link)
             passed.append((latency, link, proto, probes))
-            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(link, []),
+            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(dedupe_key(link), []),
                 "latency_ms": latency, "probe_latencies_ms": probes, "http_status": status,
                 "result": "passed_initial"}
             print(f"[{i}/{len(candidates)}] PASS {proto} avg={latency}ms probes={probes}")
         except Exception as exc:
-            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(link, []),
+            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(dedupe_key(link), []),
                 "result": "failed", "reason": str(exc)[:180]}
             print(f"[{i}/{len(candidates)}] FAIL {proto}: {type(exc).__name__}: {exc}")
 
