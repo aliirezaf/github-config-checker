@@ -16,9 +16,11 @@ SING_BOX = os.environ.get("SING_BOX", "./sing-box")
 INPUT = os.environ.get("COLLECTED_FILE", "output/collected.txt")
 GROUPED_INPUT = os.environ.get("GROUPED_FILE", "output/collected_by_source.json")
 OUT_DIR = os.environ.get("OUTPUT_DIR", "output")
-TEST_URL = os.environ.get("TEST_URL", "https://www.gstatic.com/generate_204")
-TIMEOUT = int(os.environ.get("PROXY_TIMEOUT", "8"))
+TEST_URLS = [u.strip() for u in os.environ.get("TEST_URLS", "https://www.gstatic.com/generate_204,https://cp.cloudflare.com/generate_204").split(",") if u.strip()]
+TIMEOUT = int(os.environ.get("PROXY_TIMEOUT", "5"))
 MAX_CANDIDATES = int(os.environ.get("MAX_CANDIDATES", "100"))
+FINAL_LIMIT = int(os.environ.get("FINAL_LIMIT", "20"))
+RECHECK_LIMIT = int(os.environ.get("RECHECK_LIMIT", "30"))
 SUPPORTED = {"vless", "vmess", "trojan", "ss", "socks", "socks5", "http", "https"}
 
 def free_port():
@@ -156,7 +158,7 @@ def parse_link(link):
     return outbound
 
 def run_one(link):
-    started = time.monotonic()
+    """Require HTTP 204 from every independent probe URL."""
     outbound = parse_link(link)
     port = free_port()
     config = {
@@ -183,18 +185,22 @@ def run_one(link):
                 time.sleep(0.1)
         else:
             raise TimeoutError("local proxy did not start")
-        # curl supports SOCKS5 hostname resolution through the proxy.
-        result = subprocess.run(
-            ["curl", "--silent", "--show-error", "--max-time", str(TIMEOUT),
-             "--connect-timeout", str(min(4, TIMEOUT)), "--output", os.devnull,
-             "--write-out", "%{http_code}", "--proxy", f"socks5h://127.0.0.1:{port}",
-             TEST_URL],
-            capture_output=True, text=True, timeout=TIMEOUT + 3
-        )
-        code = result.stdout.strip()
-        if result.returncode != 0 or code != "204":
-            raise RuntimeError(f"HTTPS probe expected HTTP 204, got {code or chr(110)+chr(111)+chr(32)+chr(115)+chr(116)+chr(97)+chr(116)+chr(117)+chr(115)}")
-        return max(1, int((time.monotonic() - started) * 1000)), code
+        latencies = []
+        for url in TEST_URLS:
+            started = time.monotonic()
+            result = subprocess.run(
+                ["curl", "--silent", "--show-error", "--max-time", str(TIMEOUT),
+                 "--connect-timeout", str(min(3, TIMEOUT)), "--output", os.devnull,
+                 "--write-out", "%{http_code}", "--proxy", "socks5h://127.0.0.1:" + str(port),
+                 url],
+                capture_output=True, text=True, timeout=TIMEOUT + 2
+            )
+            code = result.stdout.strip()
+            elapsed = max(1, int((time.monotonic() - started) * 1000))
+            if result.returncode != 0 or code != "204":
+                raise RuntimeError("Probe failed for " + url + ": expected HTTP 204, got " + (code or "no status"))
+            latencies.append(elapsed)
+        return round(sum(latencies) / len(latencies)), "204", latencies
     finally:
         if proc and proc.poll() is None:
             proc.terminate()
@@ -250,31 +256,59 @@ def main():
 
     working, results = [], []
     protocol_files = {"vless": [], "vmess": [], "trojan": [], "ss": [], "socks": [], "http": []}
+    results_by_link = {}
+    passed = []
     for i, link in enumerate(candidates, 1):
         proto = link.split(":", 1)[0].lower()
         if proto not in SUPPORTED:
+            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(link, []),
+                "result": "failed", "reason": "unsupported scheme"}
             continue
         try:
             try:
-                latency, status = run_one(link)
+                latency, status, probes = run_one(link)
             except (ValueError, TypeError, KeyError, json.JSONDecodeError):
-                # Invalid or malformed links are deterministic; retrying will not help.
                 raise
             except Exception as first_exc:
-                # Retry once for likely transient network/startup failures.
                 print(f"[{i}/{len(candidates)}] RETRY {proto}: {type(first_exc).__name__}: {str(first_exc)[:120]}")
                 time.sleep(0.6)
-                latency, status = run_one(link)
-            working.append(link)
-            key = "ss" if proto == "ss" else ("socks" if proto in ("socks", "socks5") else ("http" if proto in ("http", "https") else proto))
-            protocol_files[key].append(link)
-            results.append({"protocol": proto, "sources": source_by_link.get(link, []),
-                            "latency_ms": latency, "http_status": status, "result": "working"})
-            print(f"[{i}/{len(candidates)}] OK {proto} {latency}ms HTTP {status}")
+                latency, status, probes = run_one(link)
+            passed.append((latency, link, proto, probes))
+            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(link, []),
+                "latency_ms": latency, "probe_latencies_ms": probes, "http_status": status,
+                "result": "passed_initial"}
+            print(f"[{i}/{len(candidates)}] PASS {proto} avg={latency}ms probes={probes}")
         except Exception as exc:
-            results.append({"protocol": proto, "sources": source_by_link.get(link, []),
-                            "result": "failed", "reason": str(exc)[:180]})
+            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(link, []),
+                "result": "failed", "reason": str(exc)[:180]}
             print(f"[{i}/{len(candidates)}] FAIL {proto}: {type(exc).__name__}: {exc}")
+
+    passed.sort(key=lambda item: item[0])
+    finalists = passed[:max(0, RECHECK_LIMIT)]
+    verified = []
+    for j, (first_latency, link, proto, first_probes) in enumerate(finalists, 1):
+        try:
+            try:
+                latency, status, probes = run_one(link)
+            except Exception as first_exc:
+                print(f"[RECHECK {j}/{len(finalists)}] RETRY {proto}: {type(first_exc).__name__}: {str(first_exc)[:100]}")
+                time.sleep(0.6)
+                latency, status, probes = run_one(link)
+            score = round((first_latency + latency) / 2)
+            verified.append((score, link, proto))
+            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(link, []),
+                "latency_ms": score, "probe_latencies_ms": first_probes + probes,
+                "http_status": status, "result": "working", "rechecked": True}
+        except Exception as exc:
+            results_by_link[link]["result"] = "failed_recheck"
+            results_by_link[link]["reason"] = str(exc)[:180]
+    verified.sort(key=lambda item: item[0])
+    selected = verified[:max(0, FINAL_LIMIT)]
+    working = [item[1] for item in selected]
+    for _, link, proto in selected:
+        key = "ss" if proto == "ss" else ("socks" if proto in ("socks", "socks5") else ("http" if proto in ("http", "https") else proto))
+        protocol_files[key].append(link)
+    results = [results_by_link[link] for link in candidates if link in results_by_link]
 
     def write_lines(path, lines):
         with open(path, "w", encoding="utf-8") as f:
@@ -301,10 +335,11 @@ def main():
 
     with open(os.path.join(OUT_DIR, "status.json"), "w", encoding="utf-8") as f:
         json.dump({"checked_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                   "tested": len(results), "working": len(working),
+                   "tested": len(results), "passed_initial": len(passed), "rechecked": len(finalists), "working": len(working),
+                   "test_urls": TEST_URLS, "final_limit": FINAL_LIMIT,
                    "source_stats": source_stats, "results": results},
                   f, ensure_ascii=False, indent=2)
-    print(f"Finished: {len(working)}/{len(results)} passed")
+    print(f"Finished: {len(working)} high-quality configs published; {len(passed)} passed initial tests; {len(finalists)} rechecked")
 
 if __name__ == "__main__":
     main()
