@@ -26,7 +26,7 @@ FINAL_LIMIT = int(os.environ.get("FINAL_LIMIT", "0"))
 RECHECK_LIMIT = int(os.environ.get("RECHECK_LIMIT", "500"))
 TEST_WORKERS = max(1, int(os.environ.get("TEST_WORKERS", "20")))
 STABILITY_ROUNDS = max(1, int(os.environ.get("STABILITY_ROUNDS", "3")))
-STABILITY_INTERVAL = max(0, int(os.environ.get("STABILITY_INTERVAL", "10"))
+STABILITY_INTERVAL = max(0, int(os.environ.get("STABILITY_INTERVAL", "10")))
 SUPPORTED = {"vless", "vmess", "trojan", "ss", "socks", "socks5", "http", "https"}
 
 def free_port():
