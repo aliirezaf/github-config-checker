@@ -18,7 +18,7 @@ GROUPED_INPUT = os.environ.get("GROUPED_FILE", "output/collected_by_source.json"
 OUT_DIR = os.environ.get("OUTPUT_DIR", "output")
 TEST_URL = os.environ.get("TEST_URL", "https://www.gstatic.com/generate_204")
 TIMEOUT = int(os.environ.get("PROXY_TIMEOUT", "8"))
-MAX_CANDIDATES = int(os.environ.get("MAX_CANDIDATES", "400"))
+MAX_CANDIDATES = int(os.environ.get("MAX_CANDIDATES", "100"))
 SUPPORTED = {"vless", "vmess", "trojan", "ss", "socks", "socks5", "http", "https"}
 
 def free_port():
