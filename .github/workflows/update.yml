@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      MAX_CANDIDATES: "400"
+      MAX_CANDIDATES: "100"
       PROXY_TIMEOUT: "8"
       TEST_URL: "https://www.gstatic.com/generate_204"
     steps:
