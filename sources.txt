@@ -2,5 +2,14 @@ https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.t
 https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt
 https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt
 https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt
+https://raw.githubusercontent.com/iampedii/whitedns-sub/main/base64.txt
+https://raw.githubusercontent.com/4n0nymou3/multi-proxy-config-fetcher/refs/heads/main/configs/proxy_configs.txt
+https://raw.githubusercontent.com/Au1rxx/free-vpn-subscriptions/main/output/v2ray-base64.txt
+https://raw.githubusercontent.com/Danialsamadi/v2go/main/AllConfigsSub.txt
+https://raw.githubusercontent.com/LalatinaHub/LatinaSub/main/result/sub
+https://raw.githubusercontent.com/Delta-Kronecker/V2ray-Config/refs/heads/main/config/all_configs.txt
+https://raw.githubusercontent.com/roosterkid/openproxylist/refs/heads/main/V2RAY_RAW.txt
+https://raw.githubusercontent.com/ShadowException/VPN/refs/heads/main/configs/VPN-cat
 
-# Keep this list curated. Avoid sources that require login or contain private credentials.
+# Public feeds only; fetched configs are untrusted and are tested before publication.
+# Periodically remove feeds that fail repeatedly or contribute no unique working configs.
