@@ -1,6 +1,782 @@
 {
-  "checked_at_utc": "2026-10-22T22:05:32Z",
-  "tested": 0,
-  "working": 0,
-  "results": []
+  "checked_at_utc": "2026-10-22T22:21:21Z",
+  "tested": 150,
+  "working": 25,
+  "results": [
+    {
+      "protocol": "trojan",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 487,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 495,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 638,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 1245,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 570,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 645,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 612,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 324,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 187,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 177,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 221,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 243,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 247,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "vless",
+      "latency_ms": 1798,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "vmess",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "vless",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "vless",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 507,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "vless",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 539,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 257,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "socks",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "'utf-8' codec can't decode byte 0xf7 in position 3: invalid start byte"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "invalid Shadowsocks host/port"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 537,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "invalid Shadowsocks host/port"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 2244,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 550,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 408,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 416,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 508,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 619,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "latency_ms": 995,
+      "http_status": "204",
+      "result": "working"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    },
+    {
+      "protocol": "ss",
+      "result": "failed",
+      "reason": "HTTPS probe failed"
+    }
+  ]
 }
