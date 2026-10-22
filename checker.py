@@ -298,7 +298,7 @@ def main():
                 latency, status, probes = run_one(link)
             score = round((first_latency + latency) / 2)
             verified.append((score, link, proto))
-            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(link, []),
+            results_by_link[link] = {"protocol": proto, "sources": source_by_link.get(dedupe_key(link), []),
                 "latency_ms": score, "probe_latencies_ms": first_probes + probes,
                 "http_status": status, "result": "working", "rechecked": True}
         except Exception as exc:
