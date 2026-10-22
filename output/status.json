@@ -1,31 +1,38 @@
 {
-  "checked_at_utc": "2026-10-22T22:59:47Z",
+  "checked_at_utc": "2026-10-22T23:07:05Z",
   "tested": 100,
-  "working": 50,
+  "passed_initial": 48,
+  "rechecked": 30,
+  "working": 20,
+  "test_urls": [
+    "https://www.gstatic.com/generate_204",
+    "https://cp.cloudflare.com/generate_204"
+  ],
+  "final_limit": 20,
   "source_stats": {
     "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt": {
       "candidates": 5199,
       "tested": 25,
-      "working": 17,
-      "success_rate_pct": 68.0
+      "working": 14,
+      "success_rate_pct": 56.0
     },
     "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt": {
       "candidates": 7252,
       "tested": 27,
-      "working": 18,
-      "success_rate_pct": 66.7
+      "working": 12,
+      "success_rate_pct": 44.4
     },
     "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt": {
       "candidates": 371,
       "tested": 25,
-      "working": 10,
-      "success_rate_pct": 40.0
+      "working": 1,
+      "success_rate_pct": 4.0
     },
     "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt": {
       "candidates": 3550,
       "tested": 29,
-      "working": 7,
-      "success_rate_pct": 24.1
+      "working": 3,
+      "success_rate_pct": 10.3
     }
   },
   "results": [
@@ -35,7 +42,7 @@
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "https",
@@ -51,7 +58,7 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "https",
@@ -66,9 +73,16 @@
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 997,
+      "latency_ms": 457,
+      "probe_latencies_ms": [
+        470,
+        450,
+        474,
+        433
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "trojan",
@@ -76,7 +90,7 @@
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
@@ -84,7 +98,7 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -92,25 +106,39 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 550,
+      "latency_ms": 460,
+      "probe_latencies_ms": [
+        468,
+        458,
+        450,
+        465
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 584,
+      "latency_ms": 456,
+      "probe_latencies_ms": [
+        468,
+        451,
+        458,
+        447
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "vless",
@@ -118,7 +146,7 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -126,25 +154,36 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 622,
+      "latency_ms": 536,
+      "probe_latencies_ms": [
+        549,
+        522
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 552,
+      "latency_ms": 459,
+      "probe_latencies_ms": [
+        461,
+        456,
+        470,
+        451
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "vless",
@@ -152,7 +191,7 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -160,27 +199,42 @@
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt",
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
-      "latency_ms": 1300,
+      "latency_ms": 913,
+      "probe_latencies_ms": [
+        989,
+        837
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 624,
+      "latency_ms": 526,
+      "probe_latencies_ms": [
+        524,
+        518,
+        557,
+        508
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 1302,
+      "latency_ms": 529,
+      "probe_latencies_ms": [
+        537,
+        521
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vmess",
@@ -188,7 +242,7 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -197,25 +251,33 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 678,
+      "latency_ms": 528,
+      "probe_latencies_ms": [
+        540,
+        517
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 638,
+      "latency_ms": 816,
+      "probe_latencies_ms": [
+        1105,
+        526
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vmess",
@@ -231,34 +293,49 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 624,
+      "latency_ms": 526,
+      "probe_latencies_ms": [
+        535,
+        515,
+        535,
+        521
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 688,
+      "latency_ms": 535,
+      "probe_latencies_ms": [
+        555,
+        515
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vless",
       "sources": [
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
-      "latency_ms": 664,
+      "latency_ms": 548,
+      "probe_latencies_ms": [
+        621,
+        475
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vmess",
@@ -266,34 +343,44 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 639,
+      "latency_ms": 574,
+      "probe_latencies_ms": [
+        534,
+        507,
+        522,
+        734
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 629,
+      "latency_ms": 526,
+      "probe_latencies_ms": [
+        545,
+        508
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vless",
       "sources": [
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
-      "latency_ms": 741,
-      "http_status": "204",
-      "result": "working"
+      "result": "failed",
+      "reason": "Probe failed for https://cp.cloudflare.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -301,70 +388,108 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 387,
+      "latency_ms": 277,
+      "probe_latencies_ms": [
+        320,
+        239,
+        308,
+        239
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 636,
+      "latency_ms": 520,
+      "probe_latencies_ms": [
+        522,
+        524,
+        530,
+        505
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "vless",
       "sources": [
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
-      "latency_ms": 246,
+      "latency_ms": 94,
+      "probe_latencies_ms": [
+        94,
+        83,
+        93,
+        108
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "vmess",
       "sources": [
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
-      "latency_ms": 1426,
+      "latency_ms": 1752,
+      "probe_latencies_ms": [
+        1766,
+        1737
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
-      ],
-      "latency_ms": 300,
-      "http_status": "204",
-      "result": "working"
-    },
-    {
-      "protocol": "ss",
-      "sources": [
-        "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
-      ],
-      "latency_ms": 412,
-      "http_status": "204",
-      "result": "working"
-    },
-    {
-      "protocol": "vless",
-      "sources": [
-        "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "latency_ms": 201,
+      "probe_latencies_ms": [
+        197,
+        200,
+        204,
+        203
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
+    },
+    {
+      "protocol": "ss",
+      "sources": [
+        "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
+      ],
+      "latency_ms": 276,
+      "probe_latencies_ms": [
+        327,
+        246,
+        294,
+        238
+      ],
+      "http_status": "204",
+      "result": "working",
+      "rechecked": true
+    },
+    {
+      "protocol": "vless",
+      "sources": [
+        "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
+      ],
+      "result": "failed",
+      "reason": "Probe failed for https://cp.cloudflare.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -372,25 +497,39 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 298,
+      "latency_ms": 198,
+      "probe_latencies_ms": [
+        201,
+        196,
+        196,
+        202
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 300,
+      "latency_ms": 202,
+      "probe_latencies_ms": [
+        200,
+        204,
+        202,
+        202
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "vless",
@@ -406,34 +545,52 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 299,
+      "latency_ms": 202,
+      "probe_latencies_ms": [
+        200,
+        205,
+        202,
+        201
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 298,
+      "latency_ms": 202,
+      "probe_latencies_ms": [
+        209,
+        199,
+        196,
+        202
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "vless",
       "sources": [
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
-      "latency_ms": 828,
+      "latency_ms": 706,
+      "probe_latencies_ms": [
+        732,
+        681
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vmess",
@@ -441,25 +598,39 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 319,
+      "latency_ms": 216,
+      "probe_latencies_ms": [
+        219,
+        206,
+        216,
+        225
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 299,
+      "latency_ms": 202,
+      "probe_latencies_ms": [
+        203,
+        201,
+        198,
+        206
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "vless",
@@ -467,34 +638,55 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
       "sources": [
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
-      "latency_ms": 558,
+      "latency_ms": 208,
+      "probe_latencies_ms": [
+        208,
+        203,
+        213,
+        208
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 321,
+      "latency_ms": 221,
+      "probe_latencies_ms": [
+        218,
+        214,
+        228,
+        225
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 321,
+      "latency_ms": 212,
+      "probe_latencies_ms": [
+        220,
+        199,
+        222,
+        208
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "vless",
@@ -502,7 +694,7 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -510,34 +702,49 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 861,
+      "latency_ms": 541,
+      "probe_latencies_ms": [
+        771,
+        311
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 325,
+      "latency_ms": 221,
+      "probe_latencies_ms": [
+        219,
+        216,
+        231,
+        216
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "trojan",
       "sources": [
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
-      "latency_ms": 757,
+      "latency_ms": 672,
+      "probe_latencies_ms": [
+        650,
+        693
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vmess",
@@ -545,7 +752,7 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -553,7 +760,7 @@
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
@@ -561,18 +768,26 @@
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt",
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
-      "latency_ms": 1165,
+      "latency_ms": 611,
+      "probe_latencies_ms": [
+        772,
+        450
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "trojan",
       "sources": [
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
-      "latency_ms": 1560,
+      "latency_ms": 738,
+      "probe_latencies_ms": [
+        779,
+        697
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vmess",
@@ -580,7 +795,7 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
@@ -588,7 +803,7 @@
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
@@ -597,7 +812,7 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "trojan",
@@ -605,7 +820,7 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -613,7 +828,7 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
@@ -621,7 +836,7 @@
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
@@ -630,61 +845,94 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
       "sources": [
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
-      "latency_ms": 643,
+      "latency_ms": 615,
+      "probe_latencies_ms": [
+        768,
+        462
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vmess",
       "sources": [
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
-      "latency_ms": 349,
+      "latency_ms": 221,
+      "probe_latencies_ms": [
+        253,
+        194,
+        246,
+        190
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 594,
+      "latency_ms": 487,
+      "probe_latencies_ms": [
+        482,
+        481,
+        501,
+        484
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 591,
+      "latency_ms": 488,
+      "probe_latencies_ms": [
+        498,
+        502,
+        469,
+        484
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "vless",
       "sources": [
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
-      "latency_ms": 986,
+      "latency_ms": 1063,
+      "probe_latencies_ms": [
+        1218,
+        908
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vmess",
       "sources": [
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
-      "latency_ms": 1059,
+      "latency_ms": 1500,
+      "probe_latencies_ms": [
+        1139,
+        1862
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vless",
@@ -692,7 +940,7 @@
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
@@ -701,43 +949,68 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
       "sources": [
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
-      "latency_ms": 1204,
+      "latency_ms": 1021,
+      "probe_latencies_ms": [
+        1105,
+        937
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "passed_initial"
     },
     {
       "protocol": "vmess",
       "sources": [
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
-      "latency_ms": 555,
+      "latency_ms": 470,
+      "probe_latencies_ms": [
+        487,
+        479,
+        459,
+        457
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 586,
+      "latency_ms": 477,
+      "probe_latencies_ms": [
+        480,
+        496,
+        463,
+        470
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 601,
+      "latency_ms": 484,
+      "probe_latencies_ms": [
+        490,
+        466,
+        493,
+        486
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "vless",
@@ -753,25 +1026,39 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 331,
+      "latency_ms": 227,
+      "probe_latencies_ms": [
+        226,
+        226,
+        226,
+        231
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "ss",
       "sources": [
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
-      "latency_ms": 327,
+      "latency_ms": 230,
+      "probe_latencies_ms": [
+        227,
+        243,
+        223,
+        227
+      ],
       "http_status": "204",
-      "result": "working"
+      "result": "working",
+      "rechecked": true
     },
     {
       "protocol": "vmess",
@@ -779,7 +1066,7 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -787,7 +1074,7 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "socks",
@@ -795,7 +1082,7 @@
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "socks",
@@ -803,7 +1090,7 @@
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
@@ -811,7 +1098,7 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -819,7 +1106,7 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
@@ -827,7 +1114,7 @@
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
@@ -835,7 +1122,7 @@
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
@@ -843,7 +1130,7 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -851,7 +1138,7 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
@@ -859,7 +1146,7 @@
         "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "ss",
@@ -867,7 +1154,7 @@
         "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vless",
@@ -875,7 +1162,7 @@
         "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     },
     {
       "protocol": "vmess",
@@ -883,7 +1170,7 @@
         "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt"
       ],
       "result": "failed",
-      "reason": "HTTPS probe expected HTTP 204, got 000"
+      "reason": "Probe failed for https://www.gstatic.com/generate_204: expected HTTP 204, got 000"
     }
   ]
 }
