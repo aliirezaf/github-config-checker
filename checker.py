@@ -14,10 +14,11 @@ import requests
 
 SING_BOX = os.environ.get("SING_BOX", "./sing-box")
 INPUT = os.environ.get("COLLECTED_FILE", "output/collected.txt")
+GROUPED_INPUT = os.environ.get("GROUPED_FILE", "output/collected_by_source.json")
 OUT_DIR = os.environ.get("OUTPUT_DIR", "output")
 TEST_URL = os.environ.get("TEST_URL", "https://www.gstatic.com/generate_204")
 TIMEOUT = int(os.environ.get("PROXY_TIMEOUT", "8"))
-MAX_CANDIDATES = int(os.environ.get("MAX_CANDIDATES", "150"))
+MAX_CANDIDATES = int(os.environ.get("MAX_CANDIDATES", "400"))
 SUPPORTED = {"vless", "vmess", "trojan", "ss", "socks", "socks5", "http", "https"}
 
 def free_port():
@@ -191,8 +192,8 @@ def run_one(link):
             capture_output=True, text=True, timeout=TIMEOUT + 3
         )
         code = result.stdout.strip()
-        if result.returncode != 0 or not code or code == "000":
-            raise RuntimeError("HTTPS probe failed")
+        if result.returncode != 0 or code != "204":
+            raise RuntimeError(f"HTTPS probe expected HTTP 204, got {code or chr(110)+chr(111)+chr(32)+chr(115)+chr(116)+chr(97)+chr(116)+chr(117)+chr(115)}")
         return max(1, int((time.monotonic() - started) * 1000)), code
     finally:
         if proc and proc.poll() is None:
@@ -213,7 +214,27 @@ def main():
             candidates = [x.strip() for x in f if x.strip()]
     except FileNotFoundError:
         candidates = []
-    candidates = candidates[:MAX_CANDIDATES]
+    # Round-robin candidates across each source so the first large feed cannot
+    # monopolize the test budget. Fall back to the flat file if grouping is absent.
+    try:
+        with open(GROUPED_INPUT, encoding="utf-8") as f:
+            grouped = json.load(f)
+        buckets = [list(dict.fromkeys(v)) for v in grouped.values() if isinstance(v, list) and v]
+        candidates = []
+        seen = set()
+        while len(candidates) < MAX_CANDIDATES and any(buckets):
+            for bucket in buckets:
+                while bucket and bucket[0] in seen:
+                    bucket.pop(0)
+                if bucket and len(candidates) < MAX_CANDIDATES:
+                    item = bucket.pop(0)
+                    seen.add(item)
+                    candidates.append(item)
+        if not candidates:
+            with open(INPUT, encoding="utf-8") as f:
+                candidates = [x.strip() for x in f if x.strip()][:MAX_CANDIDATES]
+    except (OSError, ValueError, TypeError):
+        candidates = candidates[:MAX_CANDIDATES]
     working, results = [], []
     protocol_files = {"vless": [], "vmess": [], "trojan": [], "ss": [], "socks": [], "http": []}
     for i, link in enumerate(candidates, 1):
