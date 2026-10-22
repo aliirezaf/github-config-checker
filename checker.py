@@ -18,8 +18,8 @@ GROUPED_INPUT = os.environ.get("GROUPED_FILE", "output/collected_by_source.json"
 OUT_DIR = os.environ.get("OUTPUT_DIR", "output")
 TEST_URLS = [u.strip() for u in os.environ.get("TEST_URLS", "https://www.gstatic.com/generate_204,https://cp.cloudflare.com/generate_204").split(",") if u.strip()]
 TIMEOUT = int(os.environ.get("PROXY_TIMEOUT", "5"))
-MAX_CANDIDATES = int(os.environ.get("MAX_CANDIDATES", "100"))
-FINAL_LIMIT = int(os.environ.get("FINAL_LIMIT", "20"))
+MAX_CANDIDATES = int(os.environ.get("MAX_CANDIDATES", "500"))
+FINAL_LIMIT = int(os.environ.get("FINAL_LIMIT", "0"))
 RECHECK_LIMIT = int(os.environ.get("RECHECK_LIMIT", "30"))
 SUPPORTED = {"vless", "vmess", "trojan", "ss", "socks", "socks5", "http", "https"}
 
@@ -303,7 +303,7 @@ def main():
             results_by_link[link]["result"] = "failed_recheck"
             results_by_link[link]["reason"] = str(exc)[:180]
     verified.sort(key=lambda item: item[0])
-    selected = verified[:max(0, FINAL_LIMIT)]
+    selected = verified if FINAL_LIMIT <= 0 else verified[:FINAL_LIMIT]
     working = [item[1] for item in selected]
     for _, link, proto in selected:
         key = "ss" if proto == "ss" else ("socks" if proto in ("socks", "socks5") else ("http" if proto in ("http", "https") else proto))
@@ -336,10 +336,10 @@ def main():
     with open(os.path.join(OUT_DIR, "status.json"), "w", encoding="utf-8") as f:
         json.dump({"checked_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                    "tested": len(results), "passed_initial": len(passed), "rechecked": len(finalists), "working": len(working),
-                   "test_urls": TEST_URLS, "final_limit": FINAL_LIMIT,
+                   "test_urls": TEST_URLS, "final_limit": (None if FINAL_LIMIT <= 0 else FINAL_LIMIT),
                    "source_stats": source_stats, "results": results},
                   f, ensure_ascii=False, indent=2)
-    print(f"Finished: {len(working)} high-quality configs published; {len(passed)} passed initial tests; {len(finalists)} rechecked")
+    print(f"Finished: {len(working)} high-quality configs published (no output cap); {len(passed)} passed initial tests; {len(finalists)} rechecked")
 
 if __name__ == "__main__":
     main()
