@@ -19,7 +19,7 @@ jobs:
     env:
       MAX_CANDIDATES: "500"
       PROXY_TIMEOUT: "6"
-      TEST_URLS: "https://www.gstatic.com/generate_204,https://cp.cloudflare.com/generate_204"
+      TEST_URLS: "https://www.gstatic.com/generate_204,https://connectivitycheck.gstatic.com/generate_204,https://cp.cloudflare.com/generate_204"
       RECHECK_LIMIT: "500"
       TEST_WORKERS: "20"
       STABILITY_ROUNDS: "3"
