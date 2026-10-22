@@ -4,6 +4,7 @@ import base64
 import os
 import re
 import sys
+import json
 from urllib.parse import urlsplit
 
 import requests
@@ -67,6 +68,7 @@ def main():
 
     session = requests.Session()
     links, seen = [], set()
+    by_source = {}
     for source in sources:
         try:
             parsed = urlsplit(source)
@@ -84,6 +86,7 @@ def main():
             body = b"".join(chunks).decode("utf-8", errors="replace")
             found = list(extract_links(body))
             print(f"{source}: found {len(found)} candidate(s)")
+            by_source[source] = list(dict.fromkeys(found))
             for link in found:
                 if link not in seen:
                     seen.add(link)
@@ -94,6 +97,10 @@ def main():
     with open(out_file, "w", encoding="utf-8") as f:
         f.write("\n".join(links) + ("\n" if links else ""))
     print(f"Wrote {len(links)} unique candidates to {out_file}")
+    grouped_file = os.environ.get("GROUPED_FILE", "output/collected_by_source.json")
+    with open(grouped_file, "w", encoding="utf-8") as f:
+        json.dump(by_source, f, ensure_ascii=False)
+    print(f"Wrote per-source candidates to {grouped_file}")
 
 if __name__ == "__main__":
     main()
