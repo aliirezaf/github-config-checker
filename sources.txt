@@ -1,5 +1,6 @@
-# Add one public raw-text source or subscription URL per line.
-# Example format:
-# https://raw.githubusercontent.com/OWNER/REPO/BRANCH/path/to/configs.txt
-#
+https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt
+https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt
+https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt
+https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt
+
 # Keep this list curated. Avoid sources that require login or contain private credentials.
