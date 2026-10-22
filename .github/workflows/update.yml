@@ -18,8 +18,10 @@ jobs:
     timeout-minutes: 45
     env:
       MAX_CANDIDATES: "100"
-      PROXY_TIMEOUT: "8"
-      TEST_URL: "https://www.gstatic.com/generate_204"
+      PROXY_TIMEOUT: "5"
+      TEST_URLS: "https://www.gstatic.com/generate_204,https://cp.cloudflare.com/generate_204"
+      RECHECK_LIMIT: "30"
+      FINAL_LIMIT: "20"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
