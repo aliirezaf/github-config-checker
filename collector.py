@@ -6,7 +6,7 @@ import re
 import sys
 import json
 import time
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 
 import requests
 
@@ -32,6 +32,38 @@ def decode_possible_base64(text: str) -> str:
         except Exception:
             pass
     return text
+
+def dedupe_key(link: str) -> str:
+    """Build a conservative identity key without changing the published URI.
+
+    URI fragments are display labels, not connection settings. For URI forms
+    with query parameters, parameter order is normalized; the original link is
+    still kept as the representative output value.
+    """
+    try:
+        parsed = urlsplit(link.strip())
+        scheme = parsed.scheme.lower()
+        netloc = parsed.netloc
+        if parsed.hostname:
+            credentials = ""
+            hostport = netloc
+            if "@" in netloc:
+                credentials, hostport = netloc.rsplit("@", 1)
+                credentials += "@"
+            host = parsed.hostname.lower()
+            if ":" in host and not host.startswith("["):
+                host = "[" + host + "]"
+            try:
+                port = parsed.port
+            except ValueError:
+                return link.strip()
+            netloc = credentials + host + ((":" + str(port)) if port is not None else "")
+        query = parsed.query
+        if query:
+            query = urlencode(sorted(parse_qsl(query, keep_blank_values=True)), doseq=True)
+        return urlunsplit((scheme, netloc, parsed.path, query, ""))
+    except (TypeError, ValueError):
+        return link.strip()
 
 def extract_links(text: str):
     text = decode_possible_base64(text)
@@ -70,6 +102,9 @@ def main():
     session = requests.Session()
     links, seen = [], set()
     by_source = {}
+    source_counts = {}
+    duplicates_global = 0
+    duplicates_within_source = 0
     for source in sources:
         try:
             parsed = urlsplit(source)
@@ -101,22 +136,49 @@ def main():
             finally:
                 response.close()
             found = list(extract_links(body))
-            print(f"{source}: found {len(found)} candidate(s)")
-            by_source[source] = list(dict.fromkeys(found))
+            unique_source = []
+            seen_source = set()
             for link in found:
-                if link not in seen:
-                    seen.add(link)
+                key = dedupe_key(link)
+                if key in seen_source:
+                    duplicates_within_source += 1
+                    continue
+                seen_source.add(key)
+                unique_source.append(link)
+                if key not in seen:
+                    seen.add(key)
                     links.append(link)
+                else:
+                    duplicates_global += 1
+            by_source[source] = unique_source
+            source_counts[source] = {
+                "found": len(found),
+                "unique": len(unique_source),
+                "duplicates_within_source": len(found) - len(unique_source),
+            }
+            print(f"{source}: found {len(found)}, unique {len(unique_source)}, duplicates {len(found) - len(unique_source)}")
         except Exception as exc:
             print(f"Source failed ({source}): {type(exc).__name__}: {exc}")
 
     with open(out_file, "w", encoding="utf-8") as f:
         f.write("\n".join(links) + ("\n" if links else ""))
     print(f"Wrote {len(links)} unique candidates to {out_file}")
+    print(f"Duplicate summary: {duplicates_global} duplicates across sources; {duplicates_within_source} duplicates within sources")
     grouped_file = os.environ.get("GROUPED_FILE", "output/collected_by_source.json")
     with open(grouped_file, "w", encoding="utf-8") as f:
         json.dump(by_source, f, ensure_ascii=False)
+    stats_file = os.environ.get("SOURCE_STATS_FILE", "output/source_collection_stats.json")
+    with open(stats_file, "w", encoding="utf-8") as f:
+        json.dump({
+            "sources_total": len(sources),
+            "sources_succeeded": len(by_source),
+            "unique_candidates_global": len(links),
+            "duplicates_across_sources": duplicates_global,
+            "duplicates_within_sources": duplicates_within_source,
+            "source_stats": source_counts,
+        }, f, ensure_ascii=False, indent=2)
     print(f"Wrote per-source candidates to {grouped_file}")
+    print(f"Wrote collection statistics to {stats_file}")
 
 if __name__ == "__main__":
     main()
