@@ -1,0 +1,5 @@
+# Add one public raw-text source or subscription URL per line.
+# Example format:
+# https://raw.githubusercontent.com/OWNER/REPO/BRANCH/path/to/configs.txt
+#
+# Keep this list curated. Avoid sources that require login or contain private credentials.
