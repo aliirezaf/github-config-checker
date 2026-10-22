@@ -255,7 +255,16 @@ def main():
         if proto not in SUPPORTED:
             continue
         try:
-            latency, status = run_one(link)
+            try:
+                latency, status = run_one(link)
+            except (ValueError, TypeError, KeyError, json.JSONDecodeError):
+                # Invalid or malformed links are deterministic; retrying will not help.
+                raise
+            except Exception as first_exc:
+                # Retry once for likely transient network/startup failures.
+                print(f"[{i}/{len(candidates)}] RETRY {proto}: {type(first_exc).__name__}: {str(first_exc)[:120]}")
+                time.sleep(0.6)
+                latency, status = run_one(link)
             working.append(link)
             key = "ss" if proto == "ss" else ("socks" if proto in ("socks", "socks5") else ("http" if proto in ("http", "https") else proto))
             protocol_files[key].append(link)
