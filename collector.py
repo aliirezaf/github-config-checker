@@ -5,6 +5,7 @@ import os
 import re
 import sys
 import json
+import time
 from urllib.parse import urlsplit
 
 import requests
@@ -75,15 +76,30 @@ def main():
             if parsed.scheme not in ("http", "https") or not parsed.netloc:
                 print(f"Skipping invalid source URL: {source}")
                 continue
-            response = session.get(source, timeout=TIMEOUT, headers=HEADERS, stream=True)
-            response.raise_for_status()
-            chunks, size = [], 0
-            for chunk in response.iter_content(65536, decode_unicode=False):
-                size += len(chunk)
-                if size > MAX_SOURCE_BYTES:
-                    raise ValueError("source exceeds 5 MiB limit")
-                chunks.append(chunk)
-            body = b"".join(chunks).decode("utf-8", errors="replace")
+            response = None
+            for attempt in range(3):
+                try:
+                    response = session.get(source, timeout=TIMEOUT, headers=HEADERS, stream=True)
+                    response.raise_for_status()
+                    break
+                except requests.RequestException:
+                    if response is not None:
+                        response.close()
+                    if attempt == 2:
+                        raise
+                    delay = 1.5 * (attempt + 1)
+                    print(f"Temporary source error; retrying in {delay:.1f}s ({attempt + 2}/3): {source}")
+                    time.sleep(delay)
+            try:
+                chunks, size = [], 0
+                for chunk in response.iter_content(65536, decode_unicode=False):
+                    size += len(chunk)
+                    if size > MAX_SOURCE_BYTES:
+                        raise ValueError("source exceeds 5 MiB limit")
+                    chunks.append(chunk)
+                body = b"".join(chunks).decode("utf-8", errors="replace")
+            finally:
+                response.close()
             found = list(extract_links(body))
             print(f"{source}: found {len(found)} candidate(s)")
             by_source[source] = list(dict.fromkeys(found))
