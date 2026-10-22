@@ -1,0 +1,69 @@
+{
+  "sources_total": 12,
+  "sources_succeeded": 12,
+  "unique_candidates_global": 14527,
+  "duplicates_across_sources": 6193,
+  "duplicates_within_sources": 6711,
+  "source_stats": {
+    "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt": {
+      "found": 7523,
+      "unique": 5015,
+      "duplicates_within_source": 2508
+    },
+    "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt": {
+      "found": 7528,
+      "unique": 5085,
+      "duplicates_within_source": 2443
+    },
+    "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt": {
+      "found": 371,
+      "unique": 368,
+      "duplicates_within_source": 3
+    },
+    "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt": {
+      "found": 3550,
+      "unique": 3464,
+      "duplicates_within_source": 86
+    },
+    "https://raw.githubusercontent.com/iampedii/whitedns-sub/main/base64.txt": {
+      "found": 179,
+      "unique": 177,
+      "duplicates_within_source": 2
+    },
+    "https://raw.githubusercontent.com/4n0nymou3/multi-proxy-config-fetcher/refs/heads/main/configs/proxy_configs.txt": {
+      "found": 210,
+      "unique": 207,
+      "duplicates_within_source": 3
+    },
+    "https://raw.githubusercontent.com/Au1rxx/free-vpn-subscriptions/main/output/v2ray-base64.txt": {
+      "found": 1494,
+      "unique": 1421,
+      "duplicates_within_source": 73
+    },
+    "https://raw.githubusercontent.com/Danialsamadi/v2go/main/AllConfigsSub.txt": {
+      "found": 519,
+      "unique": 518,
+      "duplicates_within_source": 1
+    },
+    "https://raw.githubusercontent.com/LalatinaHub/LatinaSub/main/result/sub": {
+      "found": 500,
+      "unique": 301,
+      "duplicates_within_source": 199
+    },
+    "https://raw.githubusercontent.com/Delta-Kronecker/V2ray-Config/refs/heads/main/config/all_configs.txt": {
+      "found": 5262,
+      "unique": 3886,
+      "duplicates_within_source": 1376
+    },
+    "https://raw.githubusercontent.com/roosterkid/openproxylist/refs/heads/main/V2RAY_RAW.txt": {
+      "found": 150,
+      "unique": 139,
+      "duplicates_within_source": 11
+    },
+    "https://raw.githubusercontent.com/ShadowException/VPN/refs/heads/main/configs/VPN-cat": {
+      "found": 145,
+      "unique": 139,
+      "duplicates_within_source": 6
+    }
+  }
+}
