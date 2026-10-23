@@ -121,8 +121,10 @@ def parse_link(link):
         if password:
             outbound["password"] = password
 
-    if tls_on or scheme in ("vless", "trojan"):
-        outbound["tls"] = {"enabled": tls_on or scheme in ("vless", "trojan")}
+    # VLESS may legitimately use plain TCP/WS without TLS. Do not force TLS
+    # unless the URI explicitly requests TLS; Trojan always uses TLS.
+    if tls_on or scheme == "trojan":
+        outbound["tls"] = {"enabled": True}
         sni = q.get("sni", q.get("serverName", [""]))[0]
         if sni:
             outbound["tls"]["server_name"] = sni
