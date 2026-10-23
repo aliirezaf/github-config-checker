@@ -40,26 +40,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install Sing-box
+      - name: Install Xray
         shell: bash
         run: |
           set -euo pipefail
-          VERSION="1.11.15"
+          VERSION="26.9.9"
           ARCH="$(uname -m)"
           case "$ARCH" in
-            x86_64) SB_ARCH="amd64" ;;
-            aarch64|arm64) SB_ARCH="arm64" ;;
+            x86_64) XRAY_ARCH="64" ;;
+            aarch64|arm64) XRAY_ARCH="arm64-v8a" ;;
             *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
           esac
-          URL="https://github.com/SagerNet/sing-box/releases/download/v${VERSION}/sing-box-${VERSION}-linux-${SB_ARCH}.tar.gz"
-          curl --fail --location --retry 3 "$URL" -o /tmp/sing-box.tar.gz
-          mkdir -p /tmp/sing-box
-          tar -xzf /tmp/sing-box.tar.gz -C /tmp/sing-box
-          SB="$(find /tmp/sing-box -type f -name sing-box | head -n 1)"
-          test -n "$SB"
-          install "$SB" ./sing-box
-          chmod +x ./sing-box
-          ./sing-box version
+          URL="https://github.com/XTLS/Xray-core/releases/download/v${VERSION}/Xray-linux-${XRAY_ARCH}.zip"
+          curl --fail --location --retry 3 "$URL" -o /tmp/xray.zip
+          mkdir -p /tmp/xray
+          python -c "import zipfile; zipfile.ZipFile('/tmp/xray.zip').extractall('/tmp/xray')"
+          install /tmp/xray/xray ./xray
+          chmod +x ./xray
+          ./xray version
 
       - name: Collect candidates
         run: python collector.py
