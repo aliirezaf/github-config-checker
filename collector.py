@@ -68,8 +68,10 @@ def dedupe_key(link: str) -> str:
 def extract_links(text: str):
     text = decode_possible_base64(text)
     # Links are separated by whitespace, quotes, commas, or HTML delimiters.
+    # Some feeds concatenate links without a newline. Stop a match if the
+    # next URI scheme starts immediately after the current link.
     pattern = re.compile(
-        r"(?i)(?:vless|vmess|trojan|ss|socks5?|https?)://[^\s\"'<>]+"
+        r"(?i)(?:vless|vmess|trojan|ss|socks5?|https?)://(?:(?!(?:vless|vmess|trojan|ss|socks5?|https?)://)[^\s\"'<>])+"
     )
     for match in pattern.findall(text):
         link = match.rstrip("),;]")
