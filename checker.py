@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Test proxy share links using Sing-box and a local SOCKS listener."""
+"""Test proxy share links using the Xray core and a local SOCKS listener."""
 import base64
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
@@ -15,7 +15,7 @@ from collector import dedupe_key
 
 import requests
 
-SING_BOX = os.environ.get("SING_BOX", "./sing-box")
+XRAY = os.environ.get("XRAY", "./xray")
 INPUT = os.environ.get("COLLECTED_FILE", "output/collected.txt")
 GROUPED_INPUT = os.environ.get("GROUPED_FILE", "output/collected_by_source.json")
 OUT_DIR = os.environ.get("OUTPUT_DIR", "output")
@@ -165,27 +165,88 @@ def parse_link(link):
             raise ValueError("Reality link missing pbk")
     return outbound
 
+def to_xray_outbound(o):
+    """Translate parsed share-link settings to Xray JSON."""
+    typ = o["type"]
+    server = {"address": o["server"], "port": o["server_port"]}
+    if typ == "vless":
+        settings = {"vnext": [{"address": o["server"], "port": o["server_port"],
+                               "users": [{"id": o["uuid"], "encryption": "none",
+                                          **({"flow": o["flow"]} if o.get("flow") else {})}]}]}
+        protocol = "vless"
+    elif typ == "vmess":
+        settings = {"vnext": [{"address": o["server"], "port": o["server_port"],
+                               "users": [{"id": o["uuid"], "alterId": o.get("alter_id", 0),
+                                          "security": o.get("security", "auto")}]}]}
+        protocol = "vmess"
+    elif typ == "trojan":
+        settings = {"servers": [{"address": o["server"], "port": o["server_port"], "password": o["password"]}]}
+        protocol = "trojan"
+    elif typ == "shadowsocks":
+        settings = {"servers": [{"address": o["server"], "port": o["server_port"],
+                                 "method": o["method"], "password": o["password"]}]}
+        protocol = "shadowsocks"
+    elif typ == "socks":
+        user = {"user": o.get("username", ""), "pass": o.get("password", "")}
+        srv = {"address": o["server"], "port": o["server_port"]}
+        if user["user"]:
+            srv["users"] = [user]
+        settings, protocol = {"servers": [srv]}, "socks"
+    elif typ == "http":
+        srv = {"address": o["server"], "port": o["server_port"]}
+        if o.get("username"):
+            srv["users"] = [{"user": o["username"], "pass": o.get("password", "")}]
+        settings, protocol = {"servers": [srv]}, "http"
+    else:
+        raise ValueError("unsupported Xray outbound: " + typ)
+
+    stream = {"network": "tcp", "security": "none"}
+    tls = o.get("tls", {})
+    if tls.get("reality", {}).get("enabled"):
+        reality = tls["reality"]
+        stream["security"] = "reality"
+        stream["realitySettings"] = {"serverName": tls.get("server_name", ""),
+            "publicKey": reality.get("public_key", ""), "shortId": reality.get("short_id", ""),
+            "fingerprint": tls.get("utls", {}).get("fingerprint", "chrome")}
+    elif tls.get("enabled"):
+        stream["security"] = "tls"
+        stream["tlsSettings"] = {"serverName": tls.get("server_name", ""),
+                                 "allowInsecure": tls.get("insecure", False)}
+        if tls.get("utls", {}).get("enabled"):
+            stream["tlsSettings"]["fingerprint"] = tls["utls"].get("fingerprint", "chrome")
+    transport = o.get("transport", {})
+    if transport.get("type") == "ws":
+        stream["network"] = "ws"
+        stream["wsSettings"] = {"path": transport.get("path", "/"),
+                                "headers": transport.get("headers", {})}
+    elif transport.get("type") == "grpc":
+        stream["network"] = "grpc"
+        stream["grpcSettings"] = {"serviceName": transport.get("service_name", "")}
+    return {"tag": "proxy", "protocol": protocol, "settings": settings, "streamSettings": stream}
+
 def run_one(link):
-    """Require HTTP 204 from every independent probe URL."""
-    outbound = parse_link(link)
+    """Require HTTP 204 from every independent probe URL through Xray."""
+    outbound = to_xray_outbound(parse_link(link))
     port = free_port()
     config = {
-        "log": {"level": "error"},
-        "inbounds": [{"type": "socks", "tag": "in", "listen": "127.0.0.1", "listen_port": port}],
-        "outbounds": [outbound, {"type": "direct", "tag": "direct"}],
-        "route": {"final": "proxy"}
+        "log": {"loglevel": "error"},
+        "inbounds": [{"listen": "127.0.0.1", "port": port, "protocol": "socks",
+                      "settings": {"auth": "noauth", "udp": True}}],
+        "outbounds": [outbound, {"tag": "direct", "protocol": "freedom", "settings": {}}],
+        "routing": {"domainStrategy": "AsIs", "rules": [{"type": "field", "outboundTag": "proxy", "inboundTag": ["test-in"]}]}
     }
+    config["inbounds"][0]["tag"] = "test-in"
     with tempfile.NamedTemporaryFile("w", suffix=".json", encoding="utf-8", delete=False) as f:
         json.dump(config, f)
         cfg_path = f.name
     proc = None
     try:
-        proc = subprocess.Popen([SING_BOX, "run", "-c", cfg_path],
+        proc = subprocess.Popen([XRAY, "run", "-c", cfg_path],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         deadline = time.monotonic() + 3
         while time.monotonic() < deadline:
             if proc.poll() is not None:
-                raise RuntimeError("Sing-box exited during startup; config may be unsupported")
+                raise RuntimeError("Xray exited during startup; config may be unsupported")
             try:
                 with socket.create_connection(("127.0.0.1", port), timeout=0.2):
                     break
