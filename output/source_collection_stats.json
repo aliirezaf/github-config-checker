@@ -1,23 +1,23 @@
 {
   "sources_total": 4,
   "sources_succeeded": 3,
-  "unique_candidates_global": 10483,
-  "duplicates_across_sources": 335,
-  "duplicates_within_sources": 3376,
+  "unique_candidates_global": 10477,
+  "duplicates_across_sources": 399,
+  "duplicates_within_sources": 3484,
   "source_stats": {
     "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt": {
-      "found": 8943,
-      "unique": 5630,
-      "duplicates_within_source": 3313
+      "found": 9120,
+      "unique": 5699,
+      "duplicates_within_source": 3421
     },
     "https://raw.githubusercontent.com/mohammadaz2/v2rayConfigsForYou/refs/heads/main/configs.txt": {
-      "found": 430,
-      "unique": 427,
+      "found": 415,
+      "unique": 412,
       "duplicates_within_source": 3
     },
     "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/refs/heads/main/server.txt": {
-      "found": 4821,
-      "unique": 4761,
+      "found": 4825,
+      "unique": 4765,
       "duplicates_within_source": 60
     }
   }
